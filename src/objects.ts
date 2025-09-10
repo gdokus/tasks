@@ -8,9 +8,18 @@ import { Question, QuestionType } from "./interfaces/question";
 export function makeBlankQuestion(
     id: number,
     name: string,
-    type: QuestionType
+    type: QuestionType,
 ): Question {
-    return {};
+    return {
+        id: id,
+        name: name,
+        type: type,
+        body: "",
+        expected: "",
+        options: [],
+        points: 1,
+        published: false,
+    };
 }
 
 /**
@@ -21,6 +30,10 @@ export function makeBlankQuestion(
  * HINT: Look up the `trim` and `toLowerCase` functions.
  */
 export function isCorrect(question: Question, answer: string): boolean {
+    let exp = question.expected;
+    if (exp.toLowerCase().trim() === answer.toLowerCase().trim()) {
+        return true;
+    }
     return false;
 }
 
@@ -31,6 +44,12 @@ export function isCorrect(question: Question, answer: string): boolean {
  * be exactly one of the options.
  */
 export function isValid(question: Question, answer: string): boolean {
+    if (question.type === "short_answer_question") {
+        return true;
+    }
+    if (question.options.includes(answer)) {
+        return true;
+    }
     return false;
 }
 
@@ -41,7 +60,11 @@ export function isValid(question: Question, answer: string): boolean {
  * name "My First Question" would become "9: My First Q".
  */
 export function toShortForm(question: Question): string {
-    return "";
+    let ret = "";
+    ret = ret + question.id;
+    ret = ret + ": ";
+    ret = ret + question.name.slice(0, 10);
+    return ret;
 }
 
 /**
@@ -62,7 +85,16 @@ export function toShortForm(question: Question): string {
  * Check the unit tests for more examples of what this looks like!
  */
 export function toMarkdown(question: Question): string {
-    return "";
+    let ret = "# ";
+    ret = ret + question.name + "\n";
+    ret = ret + question.body;
+
+    if (question.type === "multiple_choice_question") {
+        for (let i = 0; i < question.options.length; i++) {
+            ret = ret + "\n" + "- " + question.options[i];
+        }
+    }
+    return ret;
 }
 
 /**
@@ -115,7 +147,7 @@ export function mergeQuestion(
     id: number,
     name: string,
     contentQuestion: Question,
-    { points }: { points: number }
+    { points }: { points: number },
 ): Question {
     return contentQuestion;
 }
