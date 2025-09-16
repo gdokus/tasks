@@ -102,7 +102,9 @@ export function toMarkdown(question: Question): string {
  * `newName`.
  */
 export function renameQuestion(question: Question, newName: string): Question {
-    return question;
+    let q: Question = { ...question };
+    q.name = newName;
+    return q;
 }
 
 /**
@@ -111,7 +113,13 @@ export function renameQuestion(question: Question, newName: string): Question {
  * published; if it was published, now it should be not published.
  */
 export function publishQuestion(question: Question): Question {
-    return question;
+    let q: Question = { ...question };
+    if (q.published) {
+        q.published = false;
+    } else {
+        q.published = true;
+    }
+    return q;
 }
 
 /**
@@ -121,7 +129,11 @@ export function publishQuestion(question: Question): Question {
  * The `published` field should be reset to false.
  */
 export function duplicateQuestion(id: number, oldQuestion: Question): Question {
-    return oldQuestion;
+    let q: Question = { ...oldQuestion };
+    q.name = "Copy of " + q.name;
+    q.published = false;
+    q.id = id;
+    return q;
 }
 
 /**
@@ -132,7 +144,10 @@ export function duplicateQuestion(id: number, oldQuestion: Question): Question {
  * Check out the subsection about "Nested Fields" for more information.
  */
 export function addOption(question: Question, newOption: string): Question {
-    return question;
+    let q: Question = { ...question };
+    q.options = [...q.options];
+    q.options.push(newOption);
+    return q;
 }
 
 /**
@@ -149,5 +164,12 @@ export function mergeQuestion(
     contentQuestion: Question,
     { points }: { points: number },
 ): Question {
-    return contentQuestion;
+    let q: Question = { ...contentQuestion };
+    q.points = points.valueOf();
+    q.published = false;
+    q.options = [...q.options];
+    q.id = id;
+    q.name = name;
+
+    return q;
 }
