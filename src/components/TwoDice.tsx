@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
  * module (which returns a random decimal between 0 up until 1) in order
  * to produce a random integer between 1 and 6 (inclusive).
  */
+
 export function d6(): number {
     return 1 + Math.floor(Math.random() * 6);
 }
